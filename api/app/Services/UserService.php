@@ -135,4 +135,47 @@ class UserService
     {
         return $request->user()->tokens()->delete();
     }
+
+
+
+    public function alterarSenhaUsuario($request)
+    {
+
+        try {
+            $user = User::whereId($request->id)->first();
+
+            if (!$user) {
+                return response([
+                    'message' => 'Usuário não encontrado.'
+                ], 401);
+            }
+
+            if (!Hash::check($request->senhaAntiga, $user->password)) {
+                return response([
+                    'message' => 'Senha antiga inválida.'
+                ], 401);
+            }
+
+            if ($request->senhaNova != $request->confirmaSenhaNova) {
+                return response([
+                    'message' => 'A nova senha é diferente da confirmação de senha.'
+                ], 401);
+            }
+
+            if ($user->primeiroAcesso) {
+                $user->primeiroAcesso = false;
+            }
+
+            $user->password = Hash::make($request->senhaNova);
+            $user->save();
+
+            return response([
+                'message' => 'Alterado com sucesso.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 406);
+        }
+    }
 }

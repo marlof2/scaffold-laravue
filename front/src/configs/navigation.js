@@ -6,21 +6,30 @@ export default {
     text: '',
     key: '',
     items: [
-      { icon: 'mdi-view-dashboard-outline', key: 'menu.dashboard', text: 'Dashboard', link: '/dashboard/analytics', codigoPemissao: null }
+      { icon: 'mdi-view-dashboard-outline', key: 'Início', text: 'Início', link: '/pagina-inicial', codigoPemissao: null }
     ]
   },
   {
     text: 'ADMINISTRATIVO',
     items: [
-      { icon: 'mdi-airplane-landing', key: 'menu.landingPage', text: 'Landing Page', link: '/landing',codigoPemissao: null },
-      { icon: 'mdi-cash-usd-outline', key: 'menu.pricingPage', text: 'Pricing Page', link: '/landing/pricing',codigoPemissao: null }
+      { icon: 'mdi-account-supervisor-outline',
+       key: 'Usuários do Sistema',
+       text: 'Landing Page',
+       link: '/users',
+       codigoPemissao: null },
+      {
+        icon: "mdi-account-supervisor-circle",
+        text: "Perfis e Permissões",
+        link: "/papel",
+        codigoPemissao: null
+      },
     ]
   },
-  // {
-  //   text: 'Pagina',
-  //   key: 'menu.pages',
-  //   items: menuPages
-  // },
+    // {
+    //   text: 'Pagina',
+    //   key: 'menu.pages',
+    //   items: menuPages
+    // },
     // {
     //   text: 'Other',
     //   key: 'menu.others',

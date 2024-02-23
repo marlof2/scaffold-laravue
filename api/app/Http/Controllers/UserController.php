@@ -36,8 +36,14 @@ class UserController
     {
         return $this->userService->show($id);
     }
+
     function destroy($id)
     {
         return $this->userService->destroy($id);
+    }
+
+    function alterarSenhaUsuario(Request $request)
+    {
+        return  $this->userService->alterarSenhaUsuario($request);
     }
 }

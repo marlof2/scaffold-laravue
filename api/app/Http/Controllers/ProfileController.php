@@ -30,6 +30,11 @@ class ProfileController extends Controller
         return $this->profileService->update($request, $id);
     }
 
+    function show($id)
+    {
+        return $this->profileService->show($id);
+    }
+
     protected function destroy($id)
     {
         return $this->profileService->destroy($id);
@@ -40,8 +45,8 @@ class ProfileController extends Controller
         return $this->profileService->getAbilities($id);
     }
 
-    protected function addPermissions(Request $request, $id)
+    protected function addPermissions(Request $request)
     {
-        return $this->profileService->addPermissions($id, $request);
+        return $this->profileService->addPermissions($request);
     }
 }

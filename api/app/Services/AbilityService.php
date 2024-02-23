@@ -16,6 +16,6 @@ class AbilityService
 
     public function index($request)
     {
-       return $this->ability->orderBy('slug', 'asc')->get();
+       return $this->ability->groupBy('slug')->get();
     }
 }

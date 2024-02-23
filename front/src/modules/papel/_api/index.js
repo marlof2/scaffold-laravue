@@ -45,14 +45,21 @@ const deleteItem = async (id) => {
   return false;
 };
 
-const getPermissoes = async (id) => {
-  const result = await Api.get(`${apiUrl + '/permissoes'}`, id);
+const getAbilityByProfile = async (id) => {
+  const result = await Api.get(`${apiUrl + '/abilities'}`, id);
   if (result) {
     return result.data;
   }
   return false;
 };
 
+const addPermissions = async (params) => {
+  const result = await Api.post(apiUrl + "/addAbilities", params);
+  if (result) {
+    return result;
+  }
+  return false;
+};
 
 export default {
   getItems,
@@ -60,5 +67,6 @@ export default {
   createItem,
   updateItem,
   deleteItem,
-  getPermissoes,
+  getAbilityByProfile,
+  addPermissions
 };

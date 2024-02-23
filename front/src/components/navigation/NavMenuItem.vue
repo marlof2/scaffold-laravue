@@ -81,18 +81,18 @@ export default {
     }),
   },
   watch: {
-    getPermissoes(value) {
-      if (
-        value.codigo_permissao != null &&
-        this.menuItem.codigoPemissao != null
-      ) {
-        value.codigo_permissao.forEach((val) => {
-          if (val == this.menuItem.codigoPemissao) {
-            this.permissaoMenu = val;
-          }
-        });
-      }
-    },
+    // getPermissoes(value) {
+    //   if (
+    //     value.codigo_permissao != null &&
+    //     this.menuItem.codigoPemissao != null
+    //   ) {
+    //     value.codigo_permissao.forEach((val) => {
+    //       if (val == this.menuItem.codigoPemissao) {
+    //         this.permissaoMenu = val;
+    //       }
+    //     });
+    //   }
+    // },
   },
 };
 </script>

@@ -12,9 +12,6 @@
       :show-select="showSelect"
       :single-select="singleSelect"
       :value="value"
-      :customColumnCard="customColumnCard"
-      :customColumnTwo="customColumnTwo"
-      :customColumnThree="customColumnThree"
       :colunmCustom="colunmCustom"
       @input="onSelect"
       @toggle-select-all="toggleSelectAll"
@@ -25,6 +22,8 @@
       :item-key="itemKey"
       :selectAllCustom="selectAllCustom"
       :fixed-header="fixedHeader"
+      :loading="loading"
+      loading-text="Carregando... Por favor espere"
     >
       <template v-slot:top>
         <slot name="top"></slot>
@@ -51,113 +50,10 @@
           :select="select"
         ></slot>
       </template>
-      <template v-slot:[`item.${customColumn}`]="{ item, index }">
-        <td :class="customColumnRowPadding">
-          <slot name="customColumn" :item="item" :index="index"></slot>
-        </td>
-      </template>
-      <template v-slot:[`item.${customColumnCard}`]="{ item, index }">
-        <slot name="customColumnCard" :item="item" :index="index"></slot>
-      </template>
-      <template v-slot:[`item.${customColumnTwo}`]="{ item, index }">
-        <slot name="customColumnTwo" :item="item" :index="index"></slot>
-      </template>
-      <template v-slot:[`item.${customColumnThree}`]="{ item, index }">
-        <slot name="customColumnThree" :item="item" :index="index"></slot>
-      </template>
       <template v-if="showExpand" v-slot:[`expanded-item`]="{ item, headers }">
         <td :colspan="headers.length">
           <slot name="expanded-item" :item="item"></slot>
         </td>
-      </template>
-      <template
-        v-for="customItem in customItemsProp"
-        v-slot:[`item.${customItem.name}`]="{ item }"
-      >
-        <div :key="customItem.id">
-          <div v-if="customItem.filter === 'arithmetic'">
-            {{ calculate(customItem, item) }}
-          </div>
-          <div v-if="customItem.filter === 'lowercase'">
-            {{ `${item[customItem.name]}` | lowercase }}
-          </div>
-          <div v-if="customItem.filter === 'uppercase'">
-            {{ `${item[customItem.name]}` | uppercase }}
-          </div>
-          <div
-            v-if="customItem.filter === 'dateformat' && item[customItem.name]"
-          >
-            {{ `${item[customItem.name]}` | dateformat }}
-          </div>
-          <div
-            v-if="
-              customItem.filter === 'formatdatexml' && item[customItem.name]
-            "
-          >
-            {{ `${item[customItem.name]}` | formatdatexml }}
-          </div>
-          <div
-            v-if="
-              customItem.filter === 'formatdatehour' && item[customItem.name]
-            "
-          >
-            {{ `${item[customItem.name]}` | formatdatehour }}
-          </div>
-          <div
-            v-if="
-              customItem.filter === 'formatDateHourBR' &&
-              item[customItem.name] &&
-              !customItem.attribute
-            "
-          >
-            {{ item[customItem.name] | formatDateHourBR }}
-          </div>
-          <div
-            v-if="
-              customItem.filter === 'formatDateHourBR' && customItem.attribute
-            "
-          >
-            {{ readData(item, customItem) | formatDateHourBR }}
-          </div>
-          <div v-if="customItem.filter === 'boolean' && item[customItem.name]">
-            {{ customItem.valueTrue }}
-          </div>
-          <div v-if="customItem.filter === 'boolean' && !item[customItem.name]">
-            {{ customItem.valueFalse }}
-          </div>
-          <div
-            v-if="customItem.filter === 'hourformat' && item[customItem.name]"
-          >
-            {{ `${item[customItem.name]}` | hourformat }}
-          </div>
-          <div v-if="customItem.filter === 'cep' && item[customItem.name]">
-            {{ `${item[customItem.name]}` | cep }}
-          </div>
-          <div
-            v-if="customItem.filter === 'formatnumber' && item[customItem.name]"
-          >
-            {{ `${item[customItem.name]}` | formatnumber }}
-          </div>
-          <div
-            v-if="
-              customItem.filter === 'formatpercent' && item[customItem.name]
-            "
-          >
-            {{ formatPercent(item[customItem.name]) }}
-          </div>
-          <div
-            v-if="
-              customItem.filter === 'dateFormatMonth' && item[customItem.name]
-            "
-          >
-            {{ `${item[customItem.name]}` | dateFormatMonth }}
-          </div>
-          <div
-            v-if="customItem.filter === 'formatMoney' && item[customItem.name]"
-          >
-            {{ `${item[customItem.name]}` | formatMoney }}
-          </div>
-        </div>
       </template>
       <template v-slot:footer>
         <slot name="footer"></slot>
@@ -229,22 +125,6 @@ export default {
     expandIcon: {
       type: String,
       default: "mdi-chevron-down",
-    },
-    customColumn: {
-      type: String,
-      default: null,
-    },
-    customColumnCard: {
-      type: String,
-      default: null,
-    },
-    customColumnTwo: {
-      type: String,
-      default: null,
-    },
-    customColumnThree: {
-      type: String,
-      default: null,
     },
     colunmCustom: {
       type: Array,
@@ -349,6 +229,7 @@ export default {
       page: 0,
       pageCount: 0,
       itemsPerPage: 0,
+      loading: true
     };
   },
   methods: {
@@ -412,6 +293,7 @@ export default {
   watch: {
     dataProp: function (value) {
       this.items = value;
+      this.loading = false
     },
     lastPageProp: function (value) {
       this.pageCount = value;

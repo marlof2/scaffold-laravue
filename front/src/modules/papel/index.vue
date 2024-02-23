@@ -45,13 +45,13 @@
         :lastPageProp="paginate.lastPage"
         :pageProp="paginate.page"
         :itemsPerPageProp="paginate.perPages"
-        :customColumn="'acao'"
+        :colunmCustom="['acao']"
         @handlePageChange="handlePageChange"
         :permissions="permissions"
       >
-        <template v-slot:customColumn="{ item }">
+        <template v-slot:acao="{ item }">
           <IconButton
-            v-permissions="permissions.gerenciarAcesso"
+            v-permissions="permissions.listarAbilitiByProfile"
             :onClick="() => gerenciarPermissoes(item)"
             :name="'mdi-account-lock'"
             :size="22"
@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      papel: "$_papel/getItems",
+      papel: "$_profile/getItems",
     }),
     editPerfil(item) {
       return this.$router.push({ path: `papel/editar/${item.id}` });
@@ -127,7 +127,6 @@ export default {
       });
     },
     deletePerfil(item) {
-      const pathRoute = this.$router.currentRoute.name;
       this.$swal
         .fire({
           title: `Tem certeza que deseja apagar?`,
@@ -141,7 +140,7 @@ export default {
         .then(async (result) => {
           if (result.isConfirmed) {
             const response = await Api.delete(
-              `${process.env.VUE_APP_URL_API}${pathRoute}`,
+              `${process.env.VUE_APP_URL_API}${'profiles'}`,
               item.id
             );
             if (!response) return false;
@@ -171,13 +170,13 @@ export default {
     },
   },
   beforeCreate() {
-    const STORE_PAPEL = "$_papel";
+    const STORE_PAPEL = "$_profile";
     if (!(STORE_PAPEL in this.$store._modules.root._children))
       this.$store.registerModule(STORE_PAPEL, store);
   },
   computed: {
     ...mapGetters({
-      getItems: "$_papel/getItems",
+      getItems: "$_profile/getItems",
     }),
   },
   watch: {

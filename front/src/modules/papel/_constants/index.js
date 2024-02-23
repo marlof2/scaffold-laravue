@@ -8,17 +8,16 @@ state[`permissoes`] = [];
 
 const form = {
   id: '',
-  nome: "",
+  name: "",
   descricao: "",
 };
 
 const permissions = {
-  listar: "Listar perfis",
-  incluir: "Adicionar perfis",
-  alterar: "Editar perfis",
-  visualizar: "Visualizar perfis",
-  excluir: "Deletar perfis",
-  gerenciarAcesso:"Gerenciar permissoes"
+  listar: "profile_list",
+  listarAbilitiByProfile: "profile_list_ability",
+  incluir: "profile_inset",
+  alterar: "profile_edit",
+  excluir: "profile_delete",
 };
 
 const breadcrumbsIndex = [
@@ -76,7 +75,7 @@ const paginate = {
 };
 
 const headers = [
-  { text: "Nome", value: "nome", align: "left" },
+  { text: "Nome", value: "name", align: "left" },
   { text: "Descricão", value: "descricao", align: "left" },
   { text: "Ação", value: "acao", align: "right" },
 ];

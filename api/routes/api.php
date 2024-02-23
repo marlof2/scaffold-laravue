@@ -35,49 +35,23 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::prefix('users')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->middleware('abilities:user_list_all');
-        Route::post('/', [UserController::class, 'store'])->middleware('abilities:user_create');
+        Route::get('/', [UserController::class, 'index'])->middleware('abilities:user_list');
+        Route::post('/', [UserController::class, 'store'])->middleware('abilities:user_insert');
+        Route::get('/{id}', [UserController::class, 'show'])->middleware('abilities:user_list_by_id');
         Route::put('/{id}', [UserController::class, 'update'])->middleware('abilities:user_edit');
-        Route::get('/{id}', [UserController::class, 'show'])->middleware('abilities:user_by_id');
         Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('abilities:user_delete');
+        Route::post('/alterarsenha', [UserController::class, 'alterarSenhaUsuario'])->middleware('abilities:user_change_password');
     });
 
     Route::prefix('profiles')->group(function () {
-        Route::get('/', [ProfileController::class, 'index'])->middleware('abilities:list_perfil');
-        Route::post('/', [ProfileController::class, 'store'])->middleware('abilities:cad_perfil');
-        Route::put('/{id}', [ProfileController::class, 'update'])->middleware('abilities:user_edit');
-        Route::delete('/{id}', [ProfileController::class, 'destroy'])->middleware('abilities:del_perfil');
+        Route::get('/', [ProfileController::class, 'index'])->middleware('abilities:profile_list');
+        Route::post('/', [ProfileController::class, 'store'])->middleware('abilities:profile_inset');
+        Route::get('/{id}', [ProfileController::class, 'show'])->middleware('abilities:user_list_by_id');
+        Route::put('/{id}', [ProfileController::class, 'update'])->middleware('abilities:profile_edit');
+        Route::delete('/{id}', [ProfileController::class, 'destroy'])->middleware('abilities:profile_delete');
 
-        Route::get('/{id}/abilities', [ProfileController::class, 'getAbilities'])->middleware('abilities:list_ability_perfil');
-        Route::post('/{id}/addAbilities', [ProfileController::class, 'addPermissions']);
+        Route::get('/abilities/{id}', [ProfileController::class, 'getAbilities'])->middleware('abilities:profile_list_ability');
+        Route::post('/addAbilities', [ProfileController::class, 'addPermissions']);
     });
 });
 
-
-
-
-    // Route::get("/me", [AuthController::class, 'me']);
-    // Route::post('/logout', [AuthController::class, 'logout']);
-
-
-    // Route::prefix('abilities')->group(function () {
-    //     Route::get('/', [AbilityController::class, 'index']);
-    // });
-
-    // Route::prefix('users')->group(function () {
-    //     Route::get('/', [UserController::class, 'index']);
-    //     Route::post('/', [UserController::class, 'store']);
-    //     Route::put('/{id}', [UserController::class, 'update']);
-    //     Route::get('/{id}', [UserController::class, 'show']);
-    //     Route::delete('/{id}', [UserController::class, 'destroy']);
-    // });
-
-    // Route::prefix('profiles')->group(function () {
-    //     Route::get('/', [ProfileController::class, 'index']);
-    //     Route::post('/', [ProfileController::class, 'store']);
-    //     Route::put('/{id}', [ProfileController::class, 'update']);
-    //     Route::delete('/{id}', [ProfileController::class, 'destroy']);
-
-    //     Route::get('/{id}/abilities', [ProfileController::class, 'getAbilities']);
-    //     Route::post('/{id}/addAbilities', [ProfileController::class, 'addPermissions']);
-    // });

@@ -15,7 +15,7 @@
         <v-row>
           <v-col cols="12" sm="3" md="3">
             <TextField
-              v-model="form.nome"
+              v-model="form.name"
               label="Nome"
               :maxlength="60"
               :rules="required"
@@ -73,7 +73,7 @@ export default {
     TextField,
   },
   beforeCreate() {
-    const STORE_PAPEL = "$_papel";
+    const STORE_PAPEL = "$_profile";
     if (!(STORE_PAPEL in this.$store._modules.root._children))
       this.$store.registerModule(STORE_PAPEL, store);
   },
@@ -99,14 +99,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getItemById: "$_papel/getItemById",
+      getItemById: "$_profile/getItemById",
     }),
   },
   methods: {
     ...mapActions({
-      itemById: "$_papel/getItemById",
-      createItem: "$_papel/createItem",
-      updateItem: "$_papel/updateItem",
+      itemById: "$_profile/getItemById",
+      createItem: "$_profile/createItem",
+      updateItem: "$_profile/updateItem",
     }),
     async save() {
       this.formValidated = await this.$refs.form.validate();

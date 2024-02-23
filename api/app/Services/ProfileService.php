@@ -20,8 +20,8 @@ class ProfileService
 
     public function index($request)
     {
-        if ($request->filled('name')) {
-            return response()->json($this->profile->where('name', 'LIKE', '%' . $request->name . '%')->paginate(10));
+        if ($request->filled('search')) {
+            return response()->json($this->profile->where('name', 'LIKE', '%' . $request->search . '%')->paginate(10));
         }
 
         if ($request->filled('limit')) {
@@ -45,6 +45,17 @@ class ProfileService
         }
     }
 
+
+    public function show($id)
+    {
+
+        try {
+            $data = $this->profile->find($id);
+            return response()->json($data, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(["message" => 'Não foi possível cadastrar', "error" => $e->getMessage()], Response::HTTP_NOT_ACCEPTABLE);
+        }
+    }
 
     public function update($request, $id)
     {
@@ -71,12 +82,15 @@ class ProfileService
         }
     }
 
-    public function getAbilities(int $id): Profile
+    public function getAbilities(int $id)
     {
-        return $this->profile->with('abilities')->findOrFail($id);
+        $abilities = $this->profile->with('abilities')->findOrFail($id);
+        $abilities = $abilities->abilities;
+        $idAbilitis = $abilities->pluck('id')->toArray();
+        return ['abilities' => $idAbilitis];
     }
 
-    public function addPermissions($id, $request)
+    public function addPermissions($request)
     {
 
         try {
@@ -84,16 +98,16 @@ class ProfileService
             $profileAbility = new ProfileAbility();
             $dataFrom = $request->all();
 
-            $count =  $profileAbility::where('profile_id', $id)->count();
+            $count =  $profileAbility::where('profile_id', $request->profile_id)->count();
 
             if ($count > 0) {
-                $profileAbility::where('profile_id', $id)->delete();
+                $profileAbility::where('profile_id', $request->profile_id)->delete();
             }
 
-            foreach ($dataFrom['abilities'] as $value) {
+            foreach ($dataFrom['permissao'] as $value) {
                 $result = $profileAbility::create([
                     'ability_id' => $value,
-                    'profile_id' => $id,
+                    'profile_id' => $request->profile_id,
                 ]);
             }
 
