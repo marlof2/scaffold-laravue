@@ -1,0 +1,195 @@
+<template>
+  <div class="d-flex flex-grow-1 flex-column">
+    <div class="d-flex align-center py-3">
+      <div>
+        <div class="display-1">
+          {{ "Gerenciar Permissões de Usuário" }}
+        </div>
+        <Breadcrumbs :breadcrumbs="breadcrumbs" />
+      </div>
+    </div>
+    <v-card class="pa-2">
+      <v-form ref="form" v-model="valid" lazy-validation>
+        <v-row class="mb-4">
+          <v-col cols="12" sm="4" md="4">
+            <v-switch
+              color="primary"
+              :label="title"
+              :value="marcaDesmarca"
+              inset
+              v-model="marcaDesmarca"
+              @change="marcarTodos(marcaDesmarca)"
+            ></v-switch>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col
+            v-for="(permissao, i) in getItemPermissao"
+            :key="i"
+            cols="6"
+            sm="4"
+            md="4"
+
+          >
+            <v-switch
+              color="primary"
+              :label="permissao.descricao"
+              :value="permissao.id"
+              inset
+              v-model="form.permissao"
+            ></v-switch>
+          </v-col>
+        </v-row>
+
+        <v-row class="mt-2">
+          <v-col>
+            <v-card-actions>
+              <FormButton
+                :isBack="true"
+                :label="this.$strings.btn_voltar"
+                dark
+                @click="$router.go(-1)"
+                small
+              />
+              <FormButton
+                :label="this.$strings.btn_salvar"
+                dark
+                @click="save"
+                small
+              />
+            </v-card-actions>
+          </v-col>
+        </v-row>
+      </v-form>
+    </v-card>
+  </div>
+</template>
+
+<script>
+import { mapActions, mapGetters } from "vuex";
+
+import storePermissao from "../../permissao/_store";
+import storePapelPermissao from "../../papelPermissao/_store";
+import store from "../../papel/_store";
+import storeUser from "../../users/_store";
+import FormButton from "../../../components/UI/FormButton.vue";
+import Breadcrumbs from "../../../components/UI/Breadcrumbs.vue";
+import { constants } from "../../papel/_constants";
+import TextField from "../../../components/Inputs/TextField.vue";
+import SelectAutocomplete from "../../../components/Inputs/SelectAutocomplete.vue";
+import SwitchButton from "../../../components/Inputs/SwitchButton.vue";
+import Checkbox from "../../../components/Inputs/Checkbox.vue";
+
+export default {
+  name: "userForm",
+  components: {
+    FormButton,
+    Breadcrumbs,
+    TextField,
+    SelectAutocomplete,
+    SwitchButton,
+    Checkbox,
+  },
+  beforeCreate() {
+    const STORE_PERMISSAO = "$_permissao";
+    if (!(STORE_PERMISSAO in this.$store._modules.root._children))
+      this.$store.registerModule(STORE_PERMISSAO, storePermissao);
+    const STORE_PAPEL_PERMISSAO = "$_papelPermissao";
+    if (!(STORE_PAPEL_PERMISSAO in this.$store._modules.root._children))
+      this.$store.registerModule(STORE_PAPEL_PERMISSAO, storePapelPermissao);
+    const STORE_PAPEL = "$_papel";
+    if (!(STORE_PAPEL in this.$store._modules.root._children))
+      this.$store.registerModule(STORE_PAPEL, store);
+    const STORE_USER = "$_user";
+    if (!(STORE_USER in this.$store._modules.root._children))
+      this.$store.registerModule(STORE_USER, storeUser);
+  },
+  data() {
+    return {
+      valid: true,
+      formValidated: true,
+      required: [(v) => !!v || "Campo obrigatório"],
+      form: {
+        permissao: [],
+        papel_id:null
+      },
+      breadcrumbs: [...constants.breadcrumbsGerenciarPermissoes],
+      temPermissao: false,
+      marcaDesmarca: false,
+      title: "",
+    };
+  },
+
+  async created() {
+    this.form.papel_id = this.$route.params.id;
+    this.tituloMarcarEDesmarcar("Marcar");
+    this.breadcrumbs[1].text;
+    await this.permissao(this.$route.params.id);
+    await this.actionPermissao();
+  },
+
+  computed: {
+    ...mapGetters({
+      getItemPermissao: "$_permissao/getItems",
+      getPermissoes: "$_papel/getPermissoes",
+    }),
+  },
+  methods: {
+    ...mapActions({
+      actionPermissao: "$_permissao/getItems",
+      createPapelPermissao: "$_papelPermissao/createItem",
+      updatePapelPermissao: "$_papelPermissao/updateItem",
+      permissao: "$_papel/getPermissoes",
+    }),
+    tituloMarcarEDesmarcar(title) {
+      this.title = `${title} Todos.`;
+    },
+    marcarTodos(marcaDesmarca) {
+      if (marcaDesmarca) {
+        this.tituloMarcarEDesmarcar("Desmarcar");
+        this.form.permissao = [];
+        this.getItemPermissao.forEach((_permissao) => {
+          this.form.permissao.push(_permissao.id);
+        });
+      } else {
+        this.form.permissao = [];
+        this.tituloMarcarEDesmarcar("Marcar");
+      }
+      this.marcaDesmarca = false;
+    },
+    async save() {
+      this.formValidated = await this.$refs.form.validate();
+      if (!this.formValidated) {
+        return false;
+      }
+      if (this.temPermissao) {
+        const resp = await this.updatePapelPermissao(this.form);
+        if (resp.status == 200) {
+          this.$router.push({ name: "papel" });
+          Swal.messageToast(this.$strings.msg_salvo, "success");
+        }
+      } else {
+        const resp = await this.createPapelPermissao(this.form);
+        if (resp.status == 201) {
+          this.$router.push({ name: "papel" });
+          Swal.messageToast(this.$strings.msg_salvo, "success");
+        }
+      }
+    },
+  },
+  watch: {
+    getPermissoes(item) {
+      if (item.permissoes) {
+        if (item.permissoes.length >= 1) {
+          this.temPermissao = true;
+          item.permissoes.forEach((permissao) => {
+            this.form.permissao.push(permissao);
+          });
+        }
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped></style>
