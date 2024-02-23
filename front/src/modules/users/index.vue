@@ -10,7 +10,12 @@
       <HeaderGeneric :withTitle="true" class="mb-3">
         <template v-slot:addButton>
           <v-row>
-            <v-col cols="12" sm="12" md="6" v-permissions="permissions.adicionar">
+            <v-col
+              cols="12"
+              sm="12"
+              md="6"
+              v-permissions="permissions.adicionar"
+            >
               <Button
                 class="mb-1"
                 :nameIcon="'mdi-plus'"
@@ -50,7 +55,7 @@
         :permissions="permissions"
       >
         <template v-slot:cpf="{ item }">
-          {{ item.cpf | cpf }}
+          <copy-label :text="item.cpf | cpf" />
         </template>
 
         <template v-slot:acao="{ item }">
@@ -86,7 +91,9 @@ import DataTableGeneric from "../../components/UI/DataTableGeneric.vue";
 import HeaderGeneric from "../../components/UI/HeaderGeneric.vue";
 import Button from "../../components/UI/Button.vue";
 import IconButton from "../../components/UI/IconButton.vue";
- import Api from "../../api/index"
+import Api from "../../api/index";
+import storeRequest from "@/modules/request/_store";
+import CopyLabel from "../../components/common/CopyLabel.vue";
 
 export default {
   name: "userModule",
@@ -98,6 +105,7 @@ export default {
     HeaderGeneric,
     Button,
     IconButton,
+    CopyLabel,
   },
   data() {
     return {
@@ -114,11 +122,13 @@ export default {
     };
   },
   async mounted() {
+    // this.ActionShowOverlay(true);
     await this.search();
   },
   methods: {
     ...mapActions({
       users: "$_user/getItems",
+      ActionShowOverlay: "$_request/showOverlay",
     }),
     async search() {
       await this.users({
@@ -171,16 +181,24 @@ export default {
     const STORE_USER = "$_user";
     if (!(STORE_USER in this.$store._modules.root._children))
       this.$store.registerModule(STORE_USER, store);
+    const STORE_REQUEST = "$_request";
+    if (!(STORE_REQUEST in this.$store._modules.root._children))
+      this.$store.registerModule(STORE_REQUEST, storeRequest);
   },
   computed: {
     ...mapGetters({
       getItems: "$_user/getItems",
+      showOverlay: "$_request/showOverlay",
     }),
   },
   watch: {
     getItems(value) {
       const resp = value;
       this.items = resp.data;
+
+      this.items.map((el) => {
+        el.name = el.name + " " + el.sobrenome;
+      });
       this.paginate.totalPages = resp.total;
       this.paginate.page = resp.current_page;
       this.paginate.lastPage = resp.last_page;

@@ -127,7 +127,7 @@ export default {
     const STORE_USER = "$_user";
     if (!(STORE_USER in this.$store._modules.root._children))
       this.$store.registerModule(STORE_USER, store);
-    const STORE_PAPEL = "$_papel";
+    const STORE_PAPEL = "$_profile";
     if (!(STORE_PAPEL in this.$store._modules.root._children))
       this.$store.registerModule(STORE_PAPEL, storePapel);
   },
@@ -153,7 +153,7 @@ export default {
   computed: {
     ...mapGetters({
       getItemById: "$_user/getItemById",
-      getItemPapel: "$_papel/getItems",
+      getItemPapel: "$_profile/getItems",
     }),
 
     loadingInput() {
@@ -165,7 +165,7 @@ export default {
       itemById: "$_user/getItemById",
       updateItem: "$_user/updateItem",
       createItem: "$_user/createItem",
-      actionPapel: "$_papel/getItems",
+      actionPapel: "$_profile/getItems",
     }),
     async save() {
       this.formValidated = await this.$refs.form.validate();

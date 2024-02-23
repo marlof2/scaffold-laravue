@@ -45,7 +45,7 @@ import { constants } from "../_constants";
 export default {
   name: "ProdutosShow",
   beforeCreate() {
-    const STORE_PAPEL = "$_papel";
+    const STORE_PAPEL = "$_profile";
     if (!(STORE_PAPEL in this.$store._modules.root._children))
       this.$store.registerModule(STORE_PAPEL, store);
   },
@@ -69,12 +69,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getItemById: "$_papel/getItemById",
+      getItemById: "$_profile/getItemById",
     }),
   },
   methods: {
     ...mapActions({
-      itemById: "$_papel/getItemById",
+      itemById: "$_profile/getItemById",
     }),
   },
   watch: {

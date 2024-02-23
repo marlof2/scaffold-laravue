@@ -1,5 +1,6 @@
 <template>
   <div class="d-flex flex-grow-1 flex-column">
+    <Overlay v-if="requestPending" :overlay="overlay" />
     <div class="d-flex align-center py-3">
       <div>
         <div class="display-1">
@@ -24,16 +25,15 @@
         </v-row>
         <v-row>
           <v-col
-            v-for="(permissao, i) in getItemPermissao"
+            v-for="(permissao, i) in getItemAllAbilites"
             :key="i"
             cols="6"
             sm="4"
             md="4"
-
           >
             <v-switch
               color="primary"
-              :label="permissao.descricao"
+              :label="permissao.name"
               :value="permissao.id"
               inset
               v-model="form.permissao"
@@ -68,8 +68,8 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 
-import storePermissao from "../../permissao/_store";
-import storePapelPermissao from "../../papelPermissao/_store";
+import storeRequest from "@/modules/request/_store";
+import storePermissao from "../../abilities/_store";
 import store from "../../papel/_store";
 import storeUser from "../../users/_store";
 import FormButton from "../../../components/UI/FormButton.vue";
@@ -79,6 +79,7 @@ import TextField from "../../../components/Inputs/TextField.vue";
 import SelectAutocomplete from "../../../components/Inputs/SelectAutocomplete.vue";
 import SwitchButton from "../../../components/Inputs/SwitchButton.vue";
 import Checkbox from "../../../components/Inputs/Checkbox.vue";
+import Overlay from "../../../components/UI/Overlay.vue";
 
 export default {
   name: "userForm",
@@ -89,57 +90,58 @@ export default {
     SelectAutocomplete,
     SwitchButton,
     Checkbox,
+    Overlay,
   },
   beforeCreate() {
-    const STORE_PERMISSAO = "$_permissao";
+    const STORE_PERMISSAO = "$_abilities";
     if (!(STORE_PERMISSAO in this.$store._modules.root._children))
       this.$store.registerModule(STORE_PERMISSAO, storePermissao);
-    const STORE_PAPEL_PERMISSAO = "$_papelPermissao";
-    if (!(STORE_PAPEL_PERMISSAO in this.$store._modules.root._children))
-      this.$store.registerModule(STORE_PAPEL_PERMISSAO, storePapelPermissao);
-    const STORE_PAPEL = "$_papel";
+    const STORE_PAPEL = "$_profile";
     if (!(STORE_PAPEL in this.$store._modules.root._children))
       this.$store.registerModule(STORE_PAPEL, store);
     const STORE_USER = "$_user";
     if (!(STORE_USER in this.$store._modules.root._children))
       this.$store.registerModule(STORE_USER, storeUser);
+    const STORE_REQUEST = "$_request";
+    if (!(STORE_REQUEST in this.$store._modules.root._children))
+      this.$store.registerModule(STORE_REQUEST, storeRequest);
   },
   data() {
     return {
+      overlay: true,
       valid: true,
       formValidated: true,
       required: [(v) => !!v || "Campo obrigatório"],
       form: {
         permissao: [],
-        papel_id:null
+        profile_id: null,
       },
       breadcrumbs: [...constants.breadcrumbsGerenciarPermissoes],
-      temPermissao: false,
       marcaDesmarca: false,
       title: "",
     };
   },
 
   async created() {
-    this.form.papel_id = this.$route.params.id;
+    this.form.profile_id = this.$route.params.id;
     this.tituloMarcarEDesmarcar("Marcar");
     this.breadcrumbs[1].text;
-    await this.permissao(this.$route.params.id);
-    await this.actionPermissao();
+    await this.getAbilityByProfile(this.$route.params.id);
+    await this.getAllAbilites();
   },
 
   computed: {
     ...mapGetters({
-      getItemPermissao: "$_permissao/getItems",
-      getPermissoes: "$_papel/getPermissoes",
+      getItemAllAbilites: "$_abilities/getItems",
+      getItemAbilityByProfile: "$_profile/getAbilityByProfile",
+      requestPending: "$_request/requestsPending",
     }),
   },
   methods: {
     ...mapActions({
-      actionPermissao: "$_permissao/getItems",
-      createPapelPermissao: "$_papelPermissao/createItem",
-      updatePapelPermissao: "$_papelPermissao/updateItem",
-      permissao: "$_papel/getPermissoes",
+      getAllAbilites: "$_abilities/getItems",
+      getAbilityByProfile: "$_profile/getAbilityByProfile",
+      addPermissions: "$_profile/addPermissions",
     }),
     tituloMarcarEDesmarcar(title) {
       this.title = `${title} Todos.`;
@@ -148,7 +150,7 @@ export default {
       if (marcaDesmarca) {
         this.tituloMarcarEDesmarcar("Desmarcar");
         this.form.permissao = [];
-        this.getItemPermissao.forEach((_permissao) => {
+        this.getItemAllAbilites.forEach((_permissao) => {
           this.form.permissao.push(_permissao.id);
         });
       } else {
@@ -162,28 +164,19 @@ export default {
       if (!this.formValidated) {
         return false;
       }
-      if (this.temPermissao) {
-        const resp = await this.updatePapelPermissao(this.form);
-        if (resp.status == 200) {
-          this.$router.push({ name: "papel" });
-          Swal.messageToast(this.$strings.msg_salvo, "success");
-        }
-      } else {
-        const resp = await this.createPapelPermissao(this.form);
-        if (resp.status == 201) {
-          this.$router.push({ name: "papel" });
-          Swal.messageToast(this.$strings.msg_salvo, "success");
-        }
+      const resp = await this.addPermissions(this.form);
+      if (resp.status == 201) {
+        this.$router.push({ name: "papel" });
+        Swal.messageToast(this.$strings.msg_salvo, "success");
       }
     },
   },
   watch: {
-    getPermissoes(item) {
-      if (item.permissoes) {
-        if (item.permissoes.length >= 1) {
-          this.temPermissao = true;
-          item.permissoes.forEach((permissao) => {
-            this.form.permissao.push(permissao);
+    getItemAbilityByProfile(item) {
+      if (item.abilities) {
+        if (item.abilities.length >= 1) {
+          item.abilities.forEach((abilities) => {
+            this.form.permissao.push(abilities);
           });
         }
       }

@@ -1,4 +1,4 @@
-const routeMain = "permissao";
+const routeMain = "abilities";
 
 let state = {};
 

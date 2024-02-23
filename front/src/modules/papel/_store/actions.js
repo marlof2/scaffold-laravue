@@ -15,6 +15,10 @@ const createItem = async (context, object) => {
   return await api.createItem(object);
 };
 
+const addPermissions = async (context, object) => {
+  return await api.addPermissions(object);
+};
+
 const updateItem = async (context, object) => {
   return await api.updateItem(object);
 };
@@ -23,8 +27,8 @@ const deleteItem = async (context, id) => {
   const result = await api.deleteItem(id);
 };
 
-const getPermissoes = async (context, id) => {
-  const result = await api.getPermissoes(id);
+const getAbilityByProfile = async (context, id) => {
+  const result = await api.getAbilityByProfile(id);
   context.commit("STORE_PERMISSAO", result);
 };
 
@@ -34,5 +38,6 @@ export default {
   createItem,
   updateItem,
   deleteItem,
-  getPermissoes
+  getAbilityByProfile,
+  addPermissions
 };

@@ -19,11 +19,11 @@ export default [
     name: "users-visualizar",
     component: () => import("@/modules/users/_components/show"),
   },
-  {
-    path: "/users/perfil/:id",
-    name: "users-pefil",
-    component: () => import("@/modules/users/_components/perfil"),
-  },
+  // {
+  //   path: "/users/perfil/:id",
+  //   name: "users-pefil",
+  //   component: () => import("@/modules/users/_components/perfil"),
+  // },
   {
     path: "/users/trocar-senha/:id",
     name: "users-trocar-senha",

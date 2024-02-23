@@ -18,30 +18,34 @@
 
     <!-- user menu list -->
     <v-list dense nav>
-      <v-list-item
-        v-for="(item, index) in menu"
-        :key="index"
-        :to="item.link"
-        :exact="item.exact"
-        :disabled="item.disabled"
-        link
-      >
+      <!-- <v-list-item link :to="perfil()">
         <v-list-item-icon>
-          <v-icon small :class="{ 'grey--text': item.disabled }">{{ item.icon }}</v-icon>
+          <v-icon small>mdi-account-box-outline</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>{{ item.key ? $t(item.key) : item.text }}</v-list-item-title>
+          <v-list-item-title>Perfil</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item> -->
+
+      <!-- <v-divider class="my-1"></v-divider> -->
+
+      <v-list-item link :to="trocarSenha()">
+        <v-list-item-icon>
+          <v-icon small>mdi-lock-reset</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>Trocar Senha</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
       <v-divider class="my-1"></v-divider>
 
-      <v-list-item to="/auth/signin">
+      <v-list-item @click="sair()">
         <v-list-item-icon>
           <v-icon small>mdi-logout-variant</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>{{ $t('menu.logout') }}</v-list-item-title>
+          <v-list-item-title>Sair</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -49,7 +53,10 @@
 </template>
 
 <script>
-import config from '../../configs'
+import config from "../../configs";
+import store from "../../modules/login/_store";
+import { mapActions, mapGetters } from "vuex";
+
 /*
 |---------------------------------------------------------------------
 | Toolbar User Component
@@ -63,6 +70,32 @@ export default {
     return {
       menu: config.toolbar.user
     }
-  }
+  },
+  async mounted() {},
+  methods: {
+    ...mapActions({
+      logout: "$_login/logout",
+    }),
+    async sair() {
+      const { status } = await this.logout();
+      if (status) {
+        router.push({ name: "autenticar" });
+      }
+    },
+    // perfil() {
+    //   return `/users/perfil/${window.localStorage.getItem("user_id")}`;
+    // },
+    trocarSenha() {
+        return `/users/trocar-senha/${window.localStorage.getItem("user_id")}`
+    },
+  },
+  computed: {
+    ...mapGetters({}),
+  },
+  beforeCreate() {
+    const STORE_LOGIN = "$_login";
+    if (!(STORE_LOGIN in this.$store._modules.root._children))
+      this.$store.registerModule(STORE_LOGIN, store);
+  },
 }
 </script>

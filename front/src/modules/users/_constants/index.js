@@ -17,8 +17,8 @@ const form = {
 
 
 const permissions = {
-  listar: "user_list_all",
-  incluir: "user_create",
+  listar: "user_list",
+  incluir: "user_insert",
   alterar: "user_edit",
   excluir: "user_delete",
 };

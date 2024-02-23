@@ -23,11 +23,6 @@ export const routes = [
     }
   },
   {
-    path: '/dashboard/analytics',
-    name: 'dashboard-analytics',
-    component: () => import(/* webpackChunkName: "dashboard" */ '@/pages/dashboard/DashboardPage.vue')
-  },
-  {
     path: '/pagina-inicial',
     name: 'pagina-inicial',
     component: () => import(/* webpackChunkName: "blank" */ '@/pages/BlankPage.vue')

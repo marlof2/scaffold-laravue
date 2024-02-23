@@ -52,7 +52,18 @@
               <v-icon>mdi-magnify</v-icon>
             </v-btn>
 
-            <toolbar-apps />
+            <v-spacer class="d-lg-block"></v-spacer>
+
+            <div style="font-size: 13px" class="mr-3">
+              <div>
+                <strong>{{ saudacao() }} </strong>
+                {{ dadosUser ? dadosUser.name : "" }}
+              </div>
+              <div>
+                <strong>Perfil</strong>:
+                {{ dadosUser ? dadosUser.profile.name : "" }}
+              </div>
+            </div>
 
             <toolbar-user />
           </div>
@@ -75,7 +86,8 @@
             class="text-decoration-none"
             href="https://www.linkedin.com/in/marlo-marques-a21b79142/"
             target="_blank"
-            > By @Marlo Marques</a
+          >
+            By @Marlo Marques</a
           >
         </div>
       </v-footer>
@@ -90,20 +102,20 @@ import { mapState, mapGetters, mapActions } from "vuex";
 import config from "../configs";
 
 import MainMenu from "../components/navigation/MainMenu";
-import ToolbarUser from "../components/toolbar/ToolbarUser";
-import ToolbarApps from "../components/toolbar/ToolbarApps";
+import ToolbarUser from "../components/toolbar/ToolbarUser.vue";
 import store from "../modules/login/_store";
+import moment from "moment";
 
 export default {
   components: {
     MainMenu,
     ToolbarUser,
-    ToolbarApps,
   },
   data() {
     return {
       drawer: null,
       showSearch: false,
+      dadosUser: null,
       navigation: config.navigation,
     };
   },
@@ -113,7 +125,7 @@ export default {
       this.$store.registerModule(STORE_LOGIN, store);
   },
   async mounted() {
-    await this.permissoes();
+    await this.dataUser();
   },
   computed: {
     ...mapState("app", [
@@ -124,18 +136,31 @@ export default {
       "isToolbarDetached",
     ]),
     ...mapGetters({
-      getPermissoes: "$_login/getMe",
+      geDataUser: "$_login/getMe",
     }),
   },
   methods: {
     ...mapActions({
-      permissoes: "$_login/me",
+      dataUser: "$_login/me",
     }),
+
+    saudacao() {
+      const now = moment();
+
+      if (now.hour() < 12) {
+        return "Bom dia, ";
+      } else if (now.hour() < 18) {
+        return "Boa tarde, ";
+      } else {
+        return "Boa noite, ";
+      }
+    },
   },
   watch: {
-    getPermissoes(value) {
-      window.localStorage.removeItem("permissoes");
-      window.localStorage.setItem("permissoes", value.abilities);
+    geDataUser(value) {
+      this.dadosUser = value.user;
+      // window.localStorage.setItem("permissoes", "");
+      // window.localStorage.setItem("permissoes", value.abilities);
     },
   },
 };
