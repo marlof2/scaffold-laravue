@@ -16,7 +16,7 @@ class CreateProfileAbilitiesTable extends Migration
         Schema::create('profile_abilities', function (Blueprint $table) {
             $table->unsignedBigInteger('profile_id');
             $table->unsignedBigInteger('ability_id');
-            $table->foreign('profile_id')->references('id')->on('profiles');
+            $table->foreign('profile_id')->references('id')->on('profiles')->onDelete('cascade');
             $table->foreign('ability_id')->references('id')->on('abilities');
             $table->timestamps();
 

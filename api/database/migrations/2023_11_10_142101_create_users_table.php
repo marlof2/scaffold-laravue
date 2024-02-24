@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('profile_id');
+            $table->unsignedBigInteger('profile_id')->nullable();
             $table->string('name');
             $table->string('sobrenome');
             $table->string('cpf')->unique();
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('primeiro_acesso');
             $table->timestamps();
 
-            $table->foreign('profile_id')->references('id')->on('profiles');
+            $table->foreign('profile_id')->references('id')->on('profiles')->onDelete('set null');
         });
     }
 

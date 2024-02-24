@@ -91,24 +91,27 @@ class UserService
     {
         $request['cpf'] = preg_replace('/[^0-9]/', '', $request->cpf);
         $user = $this->user->where('cpf', $request->cpf)->first();
+
         if (!$user) {
             return response()->json(['error' => 'Usuario não encontrado'], Response::HTTP_NOT_FOUND);
         };
 
-        if (Hash::check($request->password, $user->password)) {
-
-            $abilities = [];
-            foreach ($user->profile->abilities as  $ability) {
-                array_push($abilities, $ability->slug);
-            }
-
-            return $user->createToken('AccessToken', $abilities)->plainTextToken;
-
-            // return [
-            // 'token' => $user->createToken('AccessToken', $abilities)->plainTextToken,
-            // 'user' => $user->with('profile')->whereId($user->id)->first()
-            // ];
+        if (!Hash::check($request->password, $user->password)) {
+            return response([
+                'message' => 'Usuário ou Senha Inválido.'
+            ], 401);
         }
+
+        $abilities = [];
+        foreach ($user->profile->abilities as  $ability) {
+            array_push($abilities, $ability->slug);
+        }
+
+        $token = $user->createToken('AccessToken', $abilities)->plainTextToken;
+
+        return response([
+            'token' => $token
+        ], 200);
     }
 
     public function me($request): array
