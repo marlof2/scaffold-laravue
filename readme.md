@@ -1,4 +1,4 @@
-<h1 align="center">Scaffolding Laravue</h1>
+<h1 align="center">scaffold Laravue</h1>
 
 ### Requisitos:
 
