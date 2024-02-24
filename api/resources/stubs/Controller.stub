@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Controllers;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use App\Http\Requests\{{modelName}}Request;
+use App\Services\{{modelName}}Service;
+
+class {{modelName}}Controller extends Controller
+{
+    protected ${{modelNameSingularLowerCase}}_service;
+    public function __construct({{modelName}}Service ${{modelNameSingularLowerCase}}_service){
+        $this->{{modelNameSingularLowerCase}}_service = ${{modelNameSingularLowerCase}}_service;
+    }
+
+    public function index(Request $request)
+    {
+         return $this->{{modelNameSingularLowerCase}}_service->index($request);
+    }
+
+    public function store({{modelName}}Request $request)
+    {
+        return $this->{{modelNameSingularLowerCase}}_service->store($request);
+    }
+
+    public function show($id)
+    {
+        return $this->{{modelNameSingularLowerCase}}_service->show($id);
+    }
+
+    public function update({{modelName}}Request $request, $id)
+    {
+        return $this->{{modelNameSingularLowerCase}}_service->update($request,$id);
+    }
+
+    public function destroy($id)
+    {
+        return $this->{{modelNameSingularLowerCase}}_service->destroy($id);
+    }
+
+}
