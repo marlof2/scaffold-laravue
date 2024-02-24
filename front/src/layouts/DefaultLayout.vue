@@ -48,20 +48,16 @@
 
             <v-spacer class="d-block d-sm-none"></v-spacer>
 
-            <v-btn class="d-block d-sm-none" icon @click="showSearch = true">
-              <v-icon>mdi-magnify</v-icon>
-            </v-btn>
-
             <v-spacer class="d-lg-block"></v-spacer>
 
             <div style="font-size: 13px" class="mr-3">
               <div>
                 <strong>{{ saudacao() }} </strong>
-                {{ dadosUser ? dadosUser.name : "" }}
+                {{ dadosUser ? dadosUser.name : "carregando." }}
               </div>
               <div>
                 <strong>Perfil</strong>:
-                {{ dadosUser ? dadosUser.profile.name : "" }}
+                {{ dadosUser ? dadosUser.profile.name : "carregando." }}
               </div>
             </div>
 
@@ -114,7 +110,6 @@ export default {
   data() {
     return {
       drawer: null,
-      showSearch: false,
       dadosUser: null,
       navigation: config.navigation,
     };

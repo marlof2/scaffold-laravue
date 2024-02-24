@@ -8,6 +8,7 @@
         <div class="title my-2">Sistema de gerenciamento de carregamento.</div>
       </div>
       <img class="w-full" src="/images/illustrations/signin-illustration.svg" />
+      <!-- <img class="w-full"  src="../assets/images/images.jpg"  /> -->
     </v-sheet>
 
     <div class="pa-2 pa-md-4 flex-grow-1 align-center justify-center d-flex flex-column">

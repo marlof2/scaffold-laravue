@@ -61,20 +61,12 @@
         </v-form>
       </v-card-text>
     </v-card>
-
-    <div class="text-center mt-6">
-      {{ $t("login.noaccount") }}
-      <router-link to="/auth/signup" class="font-weight-bold">
-        {{ $t("login.create") }}
-      </router-link>
-    </div>
   </div>
 </template>
 
 <script>
 import store from "./_store";
 import { mapActions, mapGetters } from "vuex";
-import seguranca from "../../seguranca/index";
 
 
 export default {

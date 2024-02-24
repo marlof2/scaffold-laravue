@@ -7,38 +7,32 @@
       </div>
     </div>
     <v-card class="pa-2 elevation-3">
-      <HeaderGeneric :withTitle="true" class="mb-3">
-        <template v-slot:addButton>
-          <v-row>
-            <v-col cols="12" sm="12" md="6">
-              <Button
-                class="mb-1"
-                :nameIcon="'mdi-plus'"
-                :color="'primary'"
-                :onClick="() => $router.push({ name: 'papel-cadastrar' })"
-                :label="'Adicionar'"
-              />
-            </v-col>
-          </v-row>
-        </template>
-        <template v-slot:buttons>
-          <v-row class="ml-1">
-            <v-col cols="12" sm="12" md="12">
-              <v-text-field
-                v-model="buscar"
-                append-icon="mdi-magnify"
-                @click:append="search"
-                @keyup.enter="search"
-                hide-details
-                dense
-                outlined
-                clearable
-                placeholder="Buscar"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-        </template>
-      </HeaderGeneric>
+
+      <v-row class="pl-2">
+        <v-col cols="12" sm="6" md="6" v-permissions="permissions.adicionar">
+          <Button
+            class="mb-1"
+            :nameIcon="'mdi-plus'"
+            :color="'primary'"
+            :onClick="() => $router.push({ name: 'papel-cadastrar' })"
+            :label="'Adicionar'"
+            :block="this.$vuetify.breakpoint.name == 'xs'"
+          />
+        </v-col>
+        <v-col cols="12" sm="6" md="6">
+          <v-text-field
+            v-model="buscar"
+            append-icon="mdi-magnify"
+            @click:append="search"
+            @keyup.enter="search"
+            hide-details
+            dense
+            outlined
+            clearable
+            placeholder="Buscar"
+          ></v-text-field>
+        </v-col>
+      </v-row>
       <DataTableGeneric
         :headersProp="headers"
         :dataProp="items"
