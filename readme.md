@@ -10,6 +10,9 @@
 - @vue/cli 5.0.8
 - DB: MySql
 
+### Personalized Command
+- php artisan crud:generator ClassName --fields=fields-name-1 --fields=fields-name-2 --fields=fields-name-etc It creates controller layer, model layer, service layer, migration, http request and a route all based on class name defined
+
 ### Front-end
 - Instalar as dependências.
 
