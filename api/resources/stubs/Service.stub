@@ -7,19 +7,25 @@ use App\Models\{{modelName}};
 class {{modelName}}Service
 {
     protected ${{modelNameSingularLowerCase}};
+    protected $pageLimit;
+
     public function __construct({{modelName}} ${{modelNameSingularLowerCase}}){
             $this->{{modelNameSingularLowerCase}} = ${{modelNameSingularLowerCase}};
+            $this->pageLimit = 10;
     }
     public function index($request)
     {
-        if ($request->filled('limit')) {
-            if ($request->limit == '-1') {
-                $data = $this->{{modelNameSingularLowerCase}}->get();
-            }
-        } else {
-            $data = $this->{{modelNameSingularLowerCase}}->paginate(config('app.pageLimit'));
+       $data = $this->{{modelNameSingularLowerCase}}->orderBy('name');
+        if ($request->filled('search')) {
+            $data = $data->where('name' , 'ILIKE' , '%' . $request->search . '%');
         }
-        $data = $this->{{modelNameSingularLowerCase}}->all();
+        if ($request->filled('limit')) {
+            $data = ["data" => $this->{{modelNameSingularLowerCase}}->get()];
+            return response()->json($data, Response::HTTP_OK );
+        } else {
+            $page_limit = $request->filled('per_page') ? $request->per_page : config($this->pageLimit);
+            $data = $data->paginate($page_limit);
+        }
         return response()->json($data, Response::HTTP_OK );
     }
     public function store($request)

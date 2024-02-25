@@ -30,15 +30,8 @@ class GeneratorLayerCommand extends Command
         $this->request($name);
         $nameController = $name . "Controller";
 
-        // File::append(base_path('routes/api.php'), "\n \n Route::apiResource('" . Str::plural(strtolower($name)) . "'" . str_replace(".", "", ",App\Http\Controllers\.$nameController.::class)") . "->middleware(['check.auth']);");
-
-        File::append(base_path('routes/api.php'), "\n \n Route::prefix('" . Str::plural(strtolower($name)). "')->group(function () {");
-        File::append(base_path('routes/api.php'), "\n \n Route::get('/'"  .  str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'index'])") . "->middleware(['check.auth']);");
-        File::append(base_path('routes/api.php'), "\n \n Route::post('/'" .  str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'store'])") . "->middleware(['check.auth']);");
-        File::append(base_path('routes/api.php'), "\n \n Route::get('/{id}'"  . str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'show'])") . "->middleware(['check.auth']);");
-        File::append(base_path('routes/api.php'), "\n \n Route::put('/{id}'" .  str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'update'])") . "->middleware(['check.auth']);");
-        File::append(base_path('routes/api.php'), "\n \n Route::delete('/{id}'"  . str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'destroy'])") . "->middleware(['check.auth']);");
-        File::append(base_path('routes/api.php'), "\n \n });");
+        $this->routes($name, $nameController);
+        $this->abilities($name);
         Artisan::call(command: 'make:migration create_' . strtolower($name) . '_table --create=' . strtolower($name));
     }
 
@@ -113,5 +106,59 @@ class GeneratorLayerCommand extends Command
     protected function getStub($type)
     {
         return file_get_contents(resource_path("stubs/$type.stub"));
+    }
+
+    protected function routes($name, $nameController)
+    {
+        // File::append(base_path('routes/api.php'), "\n \n Route::apiResource('" . Str::plural(strtolower($name)) . "'" . str_replace(".", "", ",App\Http\Controllers\.$nameController.::class)") . "->middleware(['check.auth']);");
+
+        File::append(base_path('routes/api.php'), "\n \n Route::prefix('" . Str::plural(strtolower($name)) . "')->group(function () {");
+        File::append(base_path('routes/api.php'), "\n \n Route::get('/'"  .  str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'index'])") . "->middleware('abilities:" . strtolower($name) . "_list');");
+        File::append(base_path('routes/api.php'), "\n \n Route::post('/'" .  str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'store'])") . "->middleware('abilities:" . strtolower($name) . "_insert');");
+        File::append(base_path('routes/api.php'), "\n \n Route::get('/{id}'"  . str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'show'])") . "->middleware('abilities:" . strtolower($name) . "_by_id');");
+        File::append(base_path('routes/api.php'), "\n \n Route::put('/{id}'" .  str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'update'])") . "->middleware('abilities:" . strtolower($name) . "_edit');");
+        File::append(base_path('routes/api.php'), "\n \n Route::delete('/{id}'"  . str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'destroy'])") . "->middleware('abilities:" . strtolower($name) . "_delete');");
+        File::append(base_path('routes/api.php'), "\n \n });");
+
+    }
+
+    protected function abilities($name)
+    {
+        File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
+        [
+            'name' => 'Listar " . strtolower($name) . "',
+            'slug' => '" . strtolower($name) . "_list',
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ],");
+        File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
+        [
+            'name' => 'Listar " . strtolower($name) . "',
+            'slug' => '" . strtolower($name) . "_insert',
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ],");
+        File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
+        [
+            'name' => 'Listar " . strtolower($name) . "',
+            'slug' => '" . strtolower($name) . "_by_id',
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ],");
+        File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
+        [
+            'name' => 'Listar " . strtolower($name) . "',
+            'slug' => '" . strtolower($name) . "_edit',
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ],");
+        File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
+        [
+            'name' => 'Listar " . strtolower($name) . "',
+            'slug' => '" . strtolower($name) . "_delete',
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ],");
+
     }
 }
