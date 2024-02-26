@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      papel: "$_profile/getItems",
+      profile: "$_profile/getItems",
     }),
     editPerfil(item) {
       return this.$router.push({ path: `papel/editar/${item.id}` });
@@ -147,7 +147,7 @@ export default {
         });
     },
     async search() {
-      await this.papel({
+      await this.profile({
         search: this.buscar,
         page: this.paginate.page,
         per_page: this.paginate.perPage,
@@ -160,7 +160,7 @@ export default {
         page,
         search: this.buscar,
       };
-      await this.papel(data);
+      await this.profile(data);
     },
   },
   beforeCreate() {

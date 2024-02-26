@@ -108,7 +108,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import store from "../_store";
-import storePapel from "../../papel/_store";
+import storeProfile from "../../profile/_store";
 import FormButton from "../../../components/UI/FormButton.vue";
 import Breadcrumbs from "../../../components/UI/Breadcrumbs.vue";
 import { constants } from "../_constants";
@@ -129,7 +129,7 @@ export default {
       this.$store.registerModule(STORE_USER, store);
     const STORE_PAPEL = "$_profile";
     if (!(STORE_PAPEL in this.$store._modules.root._children))
-      this.$store.registerModule(STORE_PAPEL, storePapel);
+      this.$store.registerModule(STORE_PAPEL, storeProfile);
   },
   data() {
     return {

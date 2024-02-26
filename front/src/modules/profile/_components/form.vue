@@ -24,11 +24,12 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" sm="3" md="3">
-            <TextField
+          <v-col cols="12" sm="6" md="6">
+            <TextArea
+              :rows="3"
               v-model="form.descricao"
               label="Descrição"
-              :maxlength="60"
+              :maxlength="300"
             />
           </v-col>
         </v-row>
@@ -64,6 +65,7 @@ import Breadcrumbs from "../../../components/UI/Breadcrumbs.vue";
 import { constants } from "../_constants";
 
 import TextField from "../../../components/Inputs/TextField.vue";
+import TextArea from "../../../components/Inputs/TextArea.vue";
 
 export default {
   name: "PapelForm",
@@ -71,6 +73,7 @@ export default {
     FormButton,
     Breadcrumbs,
     TextField,
+    TextArea,
   },
   beforeCreate() {
     const STORE_PAPEL = "$_profile";

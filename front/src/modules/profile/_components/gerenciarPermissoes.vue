@@ -70,11 +70,11 @@ import { mapActions, mapGetters } from "vuex";
 
 import storeRequest from "@/modules/request/_store";
 import storePermissao from "../../abilities/_store";
-import store from "../../papel/_store";
+import store from "../../profile/_store";
 import storeUser from "../../users/_store";
 import FormButton from "../../../components/UI/FormButton.vue";
 import Breadcrumbs from "../../../components/UI/Breadcrumbs.vue";
-import { constants } from "../../papel/_constants";
+import { constants } from "../../profile/_constants";
 import TextField from "../../../components/Inputs/TextField.vue";
 import SelectAutocomplete from "../../../components/Inputs/SelectAutocomplete.vue";
 import SwitchButton from "../../../components/Inputs/SwitchButton.vue";

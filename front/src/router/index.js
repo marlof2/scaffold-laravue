@@ -6,14 +6,14 @@ import Jwt from "../api/jwt";
 // Routes
 import UsersRoutes from "@/modules/users/_routes";
 import LoginRoutes from "@/modules/login/_routes";
-import PapelRoutes from "@/modules/papel/_routes";
+import ProfileRoutes from "@/modules/profile/_routes";
 
 Vue.use(Router)
 
 export const routes = [
   ...UsersRoutes,
   ...LoginRoutes,
-  ...PapelRoutes,
+  ...ProfileRoutes,
   {
     path: "/",
     name: "login",
