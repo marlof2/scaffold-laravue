@@ -15,22 +15,27 @@ class ProfileSeeder extends Seeder
      */
     public function run()
     {
-        // $profiles = [
-        //     [
-        //         'name' => 'ADMINISTRADOR',
-        //         "descricao" => 'Acesso total ao sistema',
-        //         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-        //         'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-        //     ]
-        // ];
-
-        Profile::firstOrCreate(
+        $profiles = [
             [
-                'name' => 'ADMINISTRADOR',
+                'name' => 'Administrador',
                 "descricao" => 'Acesso total ao sistema',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-            ]
-        );
+            ],
+            [
+                'name' => 'Usuário',
+                "descricao" => 'Breve descrição das permissões',
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+
+        ];
+
+        foreach ($profiles as $key => $value) {
+            Profile::firstOrCreate([
+                'name' => $value['name'],
+                'descricao' => $value['descricao'],
+            ]);
+        }
     }
 }
