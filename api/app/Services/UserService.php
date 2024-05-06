@@ -181,4 +181,23 @@ class UserService
             ], 406);
         }
     }
+
+    public function resetSenha($request)
+    {
+
+        try {
+            $user = User::whereId($request->id)->first();
+
+            $user->password = Hash::make($request->newPassword);
+            $user->save();
+
+            return response([
+                'message' => 'Alterado com sucesso.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 406);
+        }
+    }
 }

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('profile_id')->nullable();
             $table->string('name');
-            $table->string('sobrenome');
             $table->string('cpf')->unique();
             $table->string('email')->unique();
             $table->string('password');

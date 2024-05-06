@@ -116,6 +116,7 @@ class AbilitySeeder extends Seeder
             Ability::firstOrCreate([
                 'name' => $value['name'],
                 'slug' => $value['slug'],
+                'functionality' => $value['functionality'],
             ]);
         }
 

@@ -46,4 +46,9 @@ class UserController
     {
         return  $this->userService->alterarSenhaUsuario($request);
     }
+
+    function resetSenha(Request $request)
+    {
+        return  $this->userService->resetSenha($request);
+    }
 }

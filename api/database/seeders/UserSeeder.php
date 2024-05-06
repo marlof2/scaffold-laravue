@@ -17,7 +17,6 @@ class UserSeeder extends Seeder
     {
         User::firstOrCreate([
             'name' => 'Marlo',
-            'sobrenome' => 'Marques da Silva Filho',
             'profile_id' => 1,
             'cpf' => '03296244581',
             'email' => 'marlosilva.f2@gmail.com',

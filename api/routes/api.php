@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::put('/{id}', [UserController::class, 'update'])->middleware('abilities:user_edit');
         Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('abilities:user_delete');
         Route::post('/alterarsenha', [UserController::class, 'alterarSenhaUsuario'])->middleware('abilities:user_change_password');
+        Route::post('/resetSenha', [UserController::class, 'resetSenha'])->middleware('abilities:user_reset_senha');
     });
 
     Route::prefix('profiles')->group(function () {
