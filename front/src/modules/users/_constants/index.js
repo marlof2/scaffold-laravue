@@ -21,6 +21,7 @@ const permissions = {
   incluir: "user_insert",
   alterar: "user_edit",
   excluir: "user_delete",
+  resetSenha: "user_reset_senha",
 };
 
 const breadcrumbsIndex = [

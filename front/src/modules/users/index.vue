@@ -64,8 +64,44 @@
             :tooltipName="'Deletar'"
             :btnColor="'#be5b59'"
           />
+          <IconButton
+            v-permissions="permissions.resetSenha"
+            :onClick="
+              () => {
+                openDialog(item);
+              }
+            "
+            :name="'mdi-lock'"
+            :size="22"
+            :tooltipName="'Resetar senha'"
+            :btnColor="'gray'"
+          />
         </template>
       </DataTableGeneric>
+
+      <Dialog
+        v-model="dialogResetSenha"
+        v-if="dialogResetSenha"
+        :closeClick="closeDialog"
+        :saveClick="resetSenha"
+        :labelBtnCancel="'Fechar'"
+        :title="'Resetar senha'"
+        :maxWidth="'80vw'"
+      >
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-row>
+            <v-col cols="12" sm="12" md="12">
+              <TextField
+                v-model="form.newPassword"
+                label="Nova senha"
+                :rules="required"
+                required
+              />
+            </v-col>
+          </v-row>
+        </v-form>
+      </Dialog>
+
     </v-card>
   </div>
 </template>
@@ -83,6 +119,7 @@ import IconButton from "../../components/UI/IconButton.vue";
 import Api from "../../api/index";
 import storeRequest from "@/modules/request/_store";
 import CopyLabel from "../../components/common/CopyLabel.vue";
+import Dialog from "../../components/UI/Dialog.vue";
 
 export default {
   name: "userModule",
@@ -95,9 +132,13 @@ export default {
     Button,
     IconButton,
     CopyLabel,
+    Dialog
   },
   data() {
     return {
+      valid: true,
+      formValidated: true,
+      required: [(v) => !!v || "Campo obrigatório"],
       buscar: null,
       breadcrumbs: [...constants.breadcrumbsIndex],
       items: [],
@@ -108,6 +149,11 @@ export default {
       permissions: { ...constants.permissions },
       filter: {},
       drawer: null,
+      dialogResetSenha: false,
+      form:{
+        newPassword: null,
+        id:null
+      },
     };
   },
   async mounted() {
@@ -165,6 +211,25 @@ export default {
           }
         });
     },
+    async resetSenha(id) {
+      this.formValidated = await this.$refs.form.validate();
+      if (!this.formValidated) {
+        return false;
+      }
+      const resp = await this.reset(this.form);
+      if (resp.status == 200) {
+        this.closeDialog();
+        Swal.messageToast(this.$strings.msg_alterar, "success");
+      }
+    },
+    closeDialog() {
+      this.dialogResetSenha = false;
+      this.form = {};
+    },
+    openDialog(item) {
+      this.form.id = item.id;
+      this.dialogResetSenha = true;
+    },
   },
   beforeCreate() {
     const STORE_USER = "$_user";
@@ -185,9 +250,6 @@ export default {
       const resp = value;
       this.items = resp.data;
 
-      this.items.map((el) => {
-        el.name = el.name + " " + el.sobrenome;
-      });
       this.paginate.totalPages = resp.total;
       this.paginate.page = resp.current_page;
       this.paginate.lastPage = resp.last_page;

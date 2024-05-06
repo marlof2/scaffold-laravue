@@ -4,12 +4,12 @@
     <div class="d-flex align-center py-3">
       <div>
         <div class="display-1">
-          {{ "Gerenciar Permissões de Usuário" }}
+          {{ "Gerenciar Permissões de Perfil" }}
         </div>
         <Breadcrumbs :breadcrumbs="breadcrumbs" />
       </div>
     </div>
-    <v-card class="pa-2">
+    <v-card class="pa-4">
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-row class="mb-4">
           <v-col cols="12" sm="4" md="4">
@@ -23,11 +23,88 @@
             ></v-switch>
           </v-col>
         </v-row>
+        <h3 class="text-center mb-3">Usuário</h3>
         <v-row>
           <v-col
-            v-for="(permissao, i) in getItemAllAbilites"
+            v-for="(permissao, i) in allAbilities['usuario']"
             :key="i"
-            cols="6"
+            cols="12"
+            sm="4"
+            md="4"
+          >
+            <v-switch
+              color="primary"
+              :label="permissao.name"
+              :value="permissao.id"
+              inset
+              v-model="form.permissao"
+            ></v-switch>
+          </v-col>
+        </v-row>
+        <hr />
+        <h3 class="mt-3 text-center mb-3">Perfil</h3>
+        <v-row>
+          <v-col
+            v-for="(permissao, i) in allAbilities['perfil']"
+            :key="i"
+            cols="12"
+            sm="4"
+            md="4"
+          >
+            <v-switch
+              color="primary"
+              :label="permissao.name"
+              :value="permissao.id"
+              inset
+              v-model="form.permissao"
+            ></v-switch>
+          </v-col>
+        </v-row>
+        <hr />
+        <h3 class="mt-3 text-center mb-3">Carregamento</h3>
+        <v-row>
+          <v-col
+            v-for="(permissao, i) in allAbilities['carregamento']"
+            :key="i"
+            cols="12"
+            sm="4"
+            md="4"
+          >
+            <v-switch
+              color="primary"
+              :label="permissao.name"
+              :value="permissao.id"
+              inset
+              v-model="form.permissao"
+            ></v-switch>
+          </v-col>
+        </v-row>
+        <hr />
+        <h3 class="mt-3 text-center mb-3">Tipo de sucata</h3>
+        <v-row>
+          <v-col
+            v-for="(permissao, i) in allAbilities['sucata']"
+            :key="i"
+            cols="12"
+            sm="4"
+            md="4"
+          >
+            <v-switch
+              color="primary"
+              :label="permissao.name"
+              :value="permissao.id"
+              inset
+              v-model="form.permissao"
+            ></v-switch>
+          </v-col>
+        </v-row>
+        <hr />
+        <h3 class="mt-3 text-center mb-3">Transportadora</h3>
+        <v-row>
+          <v-col
+            v-for="(permissao, i) in allAbilities['transportadora']"
+            :key="i"
+            cols="12"
             sm="4"
             md="4"
           >
@@ -80,6 +157,7 @@ import SelectAutocomplete from "../../../components/Inputs/SelectAutocomplete.vu
 import SwitchButton from "../../../components/Inputs/SwitchButton.vue";
 import Checkbox from "../../../components/Inputs/Checkbox.vue";
 import Overlay from "../../../components/UI/Overlay.vue";
+import _ from "lodash";
 
 export default {
   name: "userForm",
@@ -119,6 +197,7 @@ export default {
       breadcrumbs: [...constants.breadcrumbsGerenciarPermissoes],
       marcaDesmarca: false,
       title: "",
+      allAbilities: [],
     };
   },
 
@@ -180,6 +259,9 @@ export default {
           });
         }
       }
+    },
+    getItemAllAbilites(item) {
+      this.allAbilities = _.groupBy(item, "functionality");
     },
   },
 };
