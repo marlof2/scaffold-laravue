@@ -23,7 +23,7 @@ class AbilitySeeder extends Seeder
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
-                'name' => 'Seleciona usuários',
+                'name' => 'Selecionar usuários',
                 'slug' => 'user_by_id',
                 'functionality' => 'usuario',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -91,7 +91,7 @@ class AbilitySeeder extends Seeder
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ],
             [
-                'name' => 'Seleciona perfil',
+                'name' => 'Selecionar perfil',
                 'slug' => 'profile_by_id',
                 'functionality' => 'perfil',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

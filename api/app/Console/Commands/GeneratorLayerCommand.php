@@ -133,28 +133,28 @@ class GeneratorLayerCommand extends Command
         ],");
         File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
         [
-            'name' => 'Listar " . strtolower($name) . "',
+            'name' => 'Selecionar " . strtolower($name) . "',
             'slug' => '" . strtolower($name) . "_insert',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ],");
         File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
         [
-            'name' => 'Listar " . strtolower($name) . "',
+            'name' => 'Cadastrar " . strtolower($name) . "',
             'slug' => '" . strtolower($name) . "_by_id',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ],");
         File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
         [
-            'name' => 'Listar " . strtolower($name) . "',
+            'name' => 'Editar " . strtolower($name) . "',
             'slug' => '" . strtolower($name) . "_edit',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ],");
         File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
         [
-            'name' => 'Listar " . strtolower($name) . "',
+            'name' => 'Deletar " . strtolower($name) . "',
             'slug' => '" . strtolower($name) . "_delete',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
