@@ -139,36 +139,31 @@ class GeneratorLayerCommand extends Command
         [
             'name' => 'Listar " . strtolower($name) . "',
             'slug' => '" . strtolower($name) . "_list',
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            'functionality' =>" . strtolower($name) . "
         ],");
         File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
         [
             'name' => 'Selecionar " . strtolower($name) . "',
             'slug' => '" . strtolower($name) . "_insert',
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            'functionality' =>" . strtolower($name) . "
         ],");
         File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
         [
             'name' => 'Cadastrar " . strtolower($name) . "',
             'slug' => '" . strtolower($name) . "_by_id',
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            'functionality' =>" . strtolower($name) . "
         ],");
         File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
         [
             'name' => 'Editar " . strtolower($name) . "',
             'slug' => '" . strtolower($name) . "_edit',
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            'functionality' =>" . strtolower($name) . "
         ],");
         File::append(base_path('database/seeders/AbilitySeeder.php'), "\n \n
         [
             'name' => 'Deletar " . strtolower($name) . "',
             'slug' => '" . strtolower($name) . "_delete',
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            'functionality' =>" . strtolower($name) . "
         ],");
     }
 
