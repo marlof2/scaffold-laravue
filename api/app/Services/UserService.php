@@ -26,12 +26,7 @@ class UserService
             if ($request->filled('search')) {
                 return response()->json($this->user::Filtro($request->search));
             }
-            // return response()->json($this->user->where('name', 'LIKE', '%' . $request->search . '%')->paginate(10));
         }
-
-        // if ($request->filled('name')) {
-        //     return response()->json($this->user->where('name', 'LIKE', '%' . $request->name . '%')->paginate(10));
-        // }
 
         $data =  $this->user->with('profile')->paginate($this->pageLimit);
 

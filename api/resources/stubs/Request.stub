@@ -21,29 +21,37 @@ class {{modelName}}Request extends FormRequest
         $this->id_request = $this->route('id');
 		return match ($this->method()) {
 			'POST' => $this->store(),
-			'PUT', 'PATCH' => $this->update(),
+			'PUT' => $this->update(),
+			'PATCH' => $this->patch(),
 			default => $this->view()
 		};
 	}
 
 	public function store()
 	{
-		return [];
+		return [
+            'name' => 'required',
+        ];
     }
 
 	public function update()
 	{
+		return [
+            'name' => 'required',
+        ];
+    }
+
+	public function patch()
+	{
 		return [];
     }
 
-	public function view()
-	{
-		return [];
-	}
 
 	public function messages()
 	{
-		return [];
+		return [
+             'name.required' => 'Nome é obrigatório',
+        ];
 	}
 
 	protected function failedValidation(Validator $validator)

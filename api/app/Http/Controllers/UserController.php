@@ -8,47 +8,50 @@ use Illuminate\Http\Request;
 
 class UserController
 {
-    private $userService;
+    private $service;
 
-    function __construct(UserService $userService)
+    function __construct(UserService $service)
     {
-        $this->userService = $userService;
+        $this->service = $service;
+    }
+
+    protected function getService(): UserService
+    {
+        return $this->service;
     }
 
     function index(Request $request)
     {
-        return  $this->userService->index($request);
+        return  $this->getService()->index($request);
     }
 
     function store(StoreUpdateUserFormRequest $request)
     {
-        $request->validated();
-        return $this->userService->store($request);
+        return $this->getService()->store($request);
     }
 
     function update(StoreUpdateUserFormRequest $request, int $id)
     {
-        $request->validated();
-        return  $this->userService->update($request, $id);
+        return  $this->getService()->update($request, $id);
     }
 
     function show($id)
     {
-        return $this->userService->show($id);
+        return $this->getService()->show($id);
     }
 
     function destroy($id)
     {
-        return $this->userService->destroy($id);
+        return $this->getService()->destroy($id);
     }
 
     function alterarSenhaUsuario(Request $request)
     {
-        return  $this->userService->alterarSenhaUsuario($request);
+        return  $this->getService()->alterarSenhaUsuario($request);
     }
 
     function resetSenha(Request $request)
     {
-        return  $this->userService->resetSenha($request);
+        return  $this->getService()->resetSenha($request);
     }
 }

@@ -13,29 +13,34 @@ class {{modelName}}Controller extends Controller
         $this->{{modelNameSingularLowerCase}}_service = ${{modelNameSingularLowerCase}}_service;
     }
 
+    protected function getService(): {{modelName}}Service
+    {
+        return $this->{{modelNameSingularLowerCase}}_service;
+    }
+
     public function index(Request $request)
     {
-         return $this->{{modelNameSingularLowerCase}}_service->index($request);
+         return $this->getService()->index($request);
     }
 
     public function store({{modelName}}Request $request)
     {
-        return $this->{{modelNameSingularLowerCase}}_service->store($request);
+        return $this->getService()->store($request);
     }
 
     public function show($id)
     {
-        return $this->{{modelNameSingularLowerCase}}_service->show($id);
+        return $this->getService()->show($id);
     }
 
     public function update({{modelName}}Request $request, $id)
     {
-        return $this->{{modelNameSingularLowerCase}}_service->update($request,$id);
+        return $this->getService()->update($request,$id);
     }
 
     public function destroy($id)
     {
-        return $this->{{modelNameSingularLowerCase}}_service->destroy($id);
+        return $this->getService()->destroy($id);
     }
 
 }

@@ -33,6 +33,7 @@ class GeneratorLayerCommand extends Command
         $this->routes($name, $nameController);
         $this->abilities($name);
         Artisan::call(command: 'make:migration create_' . strtolower($name) . '_table --create=' . strtolower($name));
+        $this->generateMigrationFields($name, $fields);
     }
 
     protected function controller($name)
@@ -119,7 +120,17 @@ class GeneratorLayerCommand extends Command
         File::append(base_path('routes/api.php'), "\n \n Route::put('/{id}'" .  str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'update'])") . "->middleware('abilities:" . strtolower($name) . "_edit');");
         File::append(base_path('routes/api.php'), "\n \n Route::delete('/{id}'"  . str_replace(".", "", ",[App\Http\Controllers\.$nameController.::class, 'destroy'])") . "->middleware('abilities:" . strtolower($name) . "_delete');");
         File::append(base_path('routes/api.php'), "\n \n });");
+    }
 
+    protected function migration($name)
+    {
+        File::append(base_path('database/migration/AbilitySeeder.php'), "\n \n
+        [
+            'name' => 'Listar " . strtolower($name) . "',
+            'slug' => '" . strtolower($name) . "_list',
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ],");
     }
 
     protected function abilities($name)
@@ -159,6 +170,26 @@ class GeneratorLayerCommand extends Command
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ],");
+    }
 
+    protected function generateMigrationFields($name, $fields)
+    {
+        $migrationFiles = File::files(database_path('migrations'));
+        $migrationFile = collect($migrationFiles)->last();
+        $content = File::get($migrationFile);
+
+        $fieldDefinitions = array_map(function ($field) {
+            return "\$table->string('{$field}');";
+        }, $fields);
+
+        $fieldDefinitionsString = implode("\n", $fieldDefinitions);
+
+        $content = str_replace(
+            "\$table->id();",
+            "\$table->id();\n            {$fieldDefinitionsString}",
+            $content
+        );
+
+        File::put($migrationFile, $content);
     }
 }

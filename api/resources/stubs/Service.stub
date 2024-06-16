@@ -15,18 +15,20 @@ class {{modelName}}Service
     }
     public function index($request)
     {
-       $data = $this->{{modelNameSingularLowerCase}}->orderBy('name');
-        if ($request->filled('search')) {
-            $data = $data->where('name' , 'ILIKE' , '%' . $request->search . '%');
-        }
-        if ($request->filled('limit')) {
+        $data = $this->{{modelNameSingularLowerCase}}->orderBy('name');
+
+            if ($request->filled('search')) {
+                return response()->json($this->{{modelNameSingularLowerCase}}::Filtro($request->search));
+            }
+
+         if ($request->filled('limit')) {
             $data = ["data" => $this->{{modelNameSingularLowerCase}}->get()];
             return response()->json($data, Response::HTTP_OK );
-        } else {
-            $page_limit = $request->filled('per_page') ? $request->per_page : config($this->pageLimit);
-            $data = $data->paginate($page_limit);
         }
-        return response()->json($data, Response::HTTP_OK );
+
+
+        return response()->json($data->paginate($this->pageLimit), Response::HTTP_OK);
+
     }
     public function store($request)
     {

@@ -10,4 +10,17 @@ class {{modelName}} extends Model
 {
     protected $guarded = ['id'];
     protected $fillable = [{{fillable}}];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
+
+     public  function scopeFiltro($query, $filtro)
+    {
+
+        return $query
+            ->OrWhere('name', 'LIKE', '%' . $filtro . '%')
+            ->paginate(config('app.pageLimit'));
+    }
 }
