@@ -5,7 +5,7 @@
         <div class="display-2 font-weight-bold primary--text">
           {{ product.name }}
         </div>
-        <div class="title my-2">Sistema de gerenciamento de carregamento.</div>
+        <div class="title my-2">Sistema de gerenciamento</div>
       </div>
       <img class="w-full" src="/images/illustrations/signin-illustration.svg" />
       <!-- <img class="w-full"  src="../assets/images/images.jpg"  /> -->

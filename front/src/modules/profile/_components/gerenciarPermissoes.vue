@@ -60,64 +60,6 @@
             ></v-switch>
           </v-col>
         </v-row>
-        <hr />
-        <h3 class="mt-3 text-center mb-3">Carregamento</h3>
-        <v-row>
-          <v-col
-            v-for="(permissao, i) in allAbilities['carregamento']"
-            :key="i"
-            cols="12"
-            sm="4"
-            md="4"
-          >
-            <v-switch
-              color="primary"
-              :label="permissao.name"
-              :value="permissao.id"
-              inset
-              v-model="form.permissao"
-            ></v-switch>
-          </v-col>
-        </v-row>
-        <hr />
-        <h3 class="mt-3 text-center mb-3">Tipo de sucata</h3>
-        <v-row>
-          <v-col
-            v-for="(permissao, i) in allAbilities['sucata']"
-            :key="i"
-            cols="12"
-            sm="4"
-            md="4"
-          >
-            <v-switch
-              color="primary"
-              :label="permissao.name"
-              :value="permissao.id"
-              inset
-              v-model="form.permissao"
-            ></v-switch>
-          </v-col>
-        </v-row>
-        <hr />
-        <h3 class="mt-3 text-center mb-3">Transportadora</h3>
-        <v-row>
-          <v-col
-            v-for="(permissao, i) in allAbilities['transportadora']"
-            :key="i"
-            cols="12"
-            sm="4"
-            md="4"
-          >
-            <v-switch
-              color="primary"
-              :label="permissao.name"
-              :value="permissao.id"
-              inset
-              v-model="form.permissao"
-            ></v-switch>
-          </v-col>
-        </v-row>
-
         <v-row class="mt-2">
           <v-col>
             <v-card-actions>
